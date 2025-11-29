@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { ArrowUpRight, Sparkles, Play, ShieldCheck } from 'lucide-react'
 import { Button } from '../ui/button'
 import { fadeInUp, staggerContainer, scaleHover } from '../../utils/motion'
@@ -36,9 +37,9 @@ export default function Hero() {
             Lumen Forge
           </div>
           <div className="hidden items-center gap-6 text-sm font-medium text-white/70 md:flex">
-            <a className="hover:text-white transition-colors" href="#services">
+            <Link className="hover:text-white transition-colors" to="/services">
               Services
-            </a>
+            </Link>
             <a className="hover:text-white transition-colors" href="#cases">
               Case Studies
             </a>
