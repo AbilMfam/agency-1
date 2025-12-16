@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, useAnimation } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
   Sparkles,
@@ -22,8 +22,6 @@ import {
   Zap,
   Target,
   Rocket,
-  Menu,
-  X,
 } from 'lucide-react'
 import { useInView } from 'react-intersection-observer'
 
@@ -31,6 +29,9 @@ import { Button } from '../components/ui/button'
 import { VisualHero } from '../components/Neon/VisualHero'
 import { NeonImage } from '../components/Neon/NeonImage'
 import { NeonAboutVisual } from '../components/Neon/NeonAboutVisual'
+import { NeonNavbar } from '../components/Neon/NeonNavbar'
+import Footer from '../components/sections/Footer'
+import CinematicHorizontalScroll from '../components/sections/CinematicHorizontalScroll'
 import { useBackground } from '../layout/NeonLayout'
 
 const visualStacks = [
@@ -153,14 +154,77 @@ function WhyChooseUsSection() {
   )
 }
 
-function HighlightedPortfolioSection() {
+
+function PortfolioSection() {
   const sectionRef = useSectionBackground('#050C18')
+  
+  // Animation controls for marquee
+  const topRowControls = useAnimation()
+  const bottomRowControls = useAnimation()
+
+  const portfolioItems = [
+    {
+      title: 'نوآر ویب',
+      description: 'طراحی رابط کاربری مدرن با تم نئونی',
+      src: '/samples/1.jpg',
+    },
+    {
+      title: 'اسپکترام پلاس',
+      description: 'بازطراحی کامل وب‌سایت با انیمیشن‌های پیشرفته',
+      src: '/samples/2.jpg',
+    },
+    {
+      title: 'اوربیت شاپ',
+      description: 'پلتفرم تجارت الکترونیک با طراحی ریسپانسیو',
+      src: '/samples/3.jpg',
+    },
+    {
+      title: 'هولو گرید',
+      description: 'تجربه برند سه‌بعدی با واقعیت افزوده',
+      src: '/samples/4.jpg',
+    },
+    {
+      title: 'نئون پالس',
+      description: 'استودیو طراحی دیجیتال و موشن گرافیک',
+      src: '/samples/1.jpg',
+    },
+  ]
+
+  // Create duplicated arrays for true infinite loop
+  const duplicatedItems = [...portfolioItems, ...portfolioItems]
+
+  useEffect(() => {
+    // Start continuous marquee animations
+    topRowControls.start({
+      x: [0, -50],
+      transition: {
+        x: {
+          repeat: Infinity,
+          repeatType: "loop",
+          duration: 30,
+          ease: "linear"
+        }
+      }
+    })
+    
+    bottomRowControls.start({
+      x: [0, 50],
+      transition: {
+        x: {
+          repeat: Infinity,
+          repeatType: "loop",
+          duration: 25,
+          ease: "linear"
+        }
+      }
+    })
+  }, [topRowControls, bottomRowControls])
 
   return (
     <motion.section
       ref={sectionRef}
-      id="highlighted-portfolio"
-      className="space-y-10"
+      id="portfolio"
+      className="space-y-16"
       initial="hidden"
       whileInView="show"
       viewport={viewportConfig}
@@ -171,32 +235,88 @@ function HighlightedPortfolioSection() {
         <h2 className="text-4xl font-semibold text-white">پرونده‌های برجسته</h2>
         <p className="text-white/70">منتخب پروژه‌هایی که برای برندها درخشش ساختیم.</p>
       </div>
-      <motion.div className="grid gap-6 md:grid-cols-2" variants={staggerContainer}>
-        {highlightedProjects.map((project) => (
+
+      {/* Top Row - Right to Left */}
+      <div className="relative">
+        <div className="relative overflow-hidden">
           <motion.div
-            key={project.title}
-            variants={staggerItem}
-            className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 shadow-[0_0_60px_rgba(0,224,255,0.08)]"
+            className="flex gap-6"
+            animate={topRowControls}
+            style={{
+              maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)'
+            }}
           >
-            <div
-              className="relative h-64 w-full"
-              style={{ backgroundImage: `url(${project.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/20 to-transparent" />
-            </div>
-            <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/70 via-black/30 to-transparent p-8 text-white">
-              <p className="text-sm uppercase tracking-[0.35em] text-white/60">{project.description}</p>
-              <h3 className="text-3xl font-semibold">{project.title}</h3>
-            </div>
-            <div className="absolute inset-1 rounded-[28px] border border-white/10 opacity-0 ring-2 ring-cyber-blue/40 transition duration-300 group-hover:opacity-100" />
-            <motion.div
-              className="absolute inset-0 bg-cyber-blue/20 opacity-0 blur-3xl transition duration-300 group-hover:opacity-60"
-              initial={{ opacity: 0 }}
-              whileHover={{ opacity: 0.7 }}
-            />
+            {duplicatedItems.map((item, index) => (
+              <div
+                key={`top-${index}`}
+                className="relative flex-shrink-0 w-72 h-56 rounded-2xl overflow-hidden shadow-lg cursor-pointer group"
+                style={{ 
+                  boxShadow: '0 4px 20px rgba(0,224,255,0.15), 0 8px 40px rgba(0,0,0,0.3)'
+                }}
+              >
+                <div
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${item.src})` }}
+                />
+                
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-black/70 flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-semibold text-white">{item.title}</h3>
+                    <p className="text-sm text-white/80">{item.description}</p>
+                    <Button className="gap-2 bg-cyber-blue hover:bg-cyber-blue/80 text-white">
+                      مشاهده نمونه‌کار
+                      <ArrowUpRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </motion.div>
-        ))}
-      </motion.div>
+        </div>
+      </div>
+
+      {/* Bottom Row - Left to Right */}
+      <div className="relative">
+        <div className="relative overflow-hidden">
+          <motion.div
+            className="flex gap-6"
+            animate={bottomRowControls}
+            style={{
+              maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)'
+            }}
+          >
+            {duplicatedItems.map((item, index) => (
+              <div
+                key={`bottom-${index}`}
+                className="relative flex-shrink-0 w-72 h-56 rounded-2xl overflow-hidden shadow-lg cursor-pointer group"
+                style={{ 
+                  boxShadow: '0 4px 20px rgba(0,224,255,0.15), 0 8px 40px rgba(0,0,0,0.3)'
+                }}
+              >
+                <div
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${item.src})` }}
+                />
+                
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-black/70 flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-semibold text-white">{item.title}</h3>
+                    <p className="text-sm text-white/80">{item.description}</p>
+                    <Button className="gap-2 bg-cyber-blue hover:bg-cyber-blue/80 text-white">
+                      مشاهده نمونه‌کار
+                      <ArrowUpRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
     </motion.section>
   )
 }
@@ -297,12 +417,6 @@ const services = [
   { title: 'برندسازی و هویت بصری', description: 'شکل‌دهی شخصیت بصری قدرتمند برای برند شما', src: '/samples/4.jpg' },
 ]
 
-const processSteps = [
-  { title: 'جلسه ایده‌پردازی', description: 'کشف هدف، مخاطب و DNA پروژه' },
-  { title: 'طراحی مفهومی', description: 'خلق جریان کار، رنگ‌ها و حس‌وحال بصری' },
-  { title: 'توسعه و اجرا', description: 'پیاده‌سازی دقیق و نئونی با استانداردهای روز' },
-  { title: 'تحویل و پشتیبانی', description: 'تضمین بهبود، ارتقا و نگهداری پروژه' },
-]
 
 const faqItems = [
   {
@@ -344,217 +458,21 @@ const whyChooseUsFeatures = [
 
 export default function Home() {
   return (
-    <main className="space-y-24 pb-24">
+    <main className="space-y-24">
       <NeonNavbar />
       <HeroSection />
       <ServicesSection />
       <WhyChooseUsSection />
       <WorkflowSection />
-      <HighlightedPortfolioSection />
+      <PortfolioSection />
       <StacksSection />
-      <ProcessSection />
+      <CinematicHorizontalScroll />
       <FAQSection />
       <AboutSection />
       <CTASection />
       <FooterSection />
+      <Footer />
     </main>
-  )
-}
-
-function NeonNavbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  
-  const navItems = [
-    { label: 'صفحه اصلی', href: '/' },
-    { label: 'خدمات', href: '/services' },
-    { label: 'نمونه‌کارها', href: '/portfolio' },
-    { label: 'درباره‌ما', href: '/about' },
-    { label: 'تماس', href: '/contact' },
-  ]
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen)
-  }
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false)
-  }
-
-  return (
-    <>
-      <motion.nav
-        initial={{ opacity: 0, y: -20, filter: 'blur(12px)' }}
-        animate={{ opacity: 1, y: 0, filter: 'blur(0)' }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="sticky top-6 z-40 flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 shadow-neon backdrop-blur-2xl md:px-6"
-      >
-        {/* Logo - Left on desktop, centered on mobile */}
-        <div className="flex items-center gap-3 text-white md:gap-3">
-          <div className="relative">
-            <div className="absolute inset-0 rounded-2xl bg-cyber-blue/30 blur-xl" aria-hidden />
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-cyber-blue/20">
-              <Sparkles className="h-5 w-5 text-white" />
-            </div>
-          </div>
-          <div className="hidden md:block">
-            <p className="text-xs uppercase tracking-[0.35em] text-white/60">نئون دیجیتال</p>
-            <p className="text-lg font-semibold">استودیو خلاقیت</p>
-          </div>
-          <div className="md:hidden">
-            <p className="text-sm font-semibold">نئون دیجیتال</p>
-          </div>
-        </div>
-
-        {/* Desktop Navigation - Hidden on mobile */}
-        <div className="hidden items-center gap-6 text-sm text-white/70 md:flex">
-          {navItems.map(({ label, href }) => (
-            <Link key={label} to={href} className="transition-colors hover:text-white">
-              {label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Desktop CTA Button - Hidden on mobile */}
-        <Link to="/contact" className="hidden md:block">
-          <Button size="sm" className="gap-2">
-            درخواست تماس
-            <ArrowUpRight className="h-4 w-4" />
-          </Button>
-        </Link>
-
-        {/* Mobile Hamburger Menu Button - Visible only on mobile */}
-        <button
-          onClick={toggleMobileMenu}
-          className="relative flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white transition-all duration-300 hover:bg-white/10 hover:border-cyber-blue/30 md:hidden"
-          aria-label="Toggle mobile menu"
-        >
-          <div className="absolute inset-0 rounded-2xl bg-cyber-blue/20 blur-xl opacity-0 transition-opacity duration-300 hover:opacity-100" aria-hidden />
-          <AnimatePresence mode="wait">
-            {isMobileMenuOpen ? (
-              <motion.div
-                key="close"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.2, ease: 'easeInOut' }}
-                className="relative"
-              >
-                <X className="h-5 w-5" />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="menu"
-                initial={{ rotate: 90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: -90, opacity: 0 }}
-                transition={{ duration: 0.2, ease: 'easeInOut' }}
-                className="relative"
-              >
-                <Menu className="h-5 w-5" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </button>
-      </motion.nav>
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
-              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm md:hidden"
-              onClick={closeMobileMenu}
-            />
-            
-            {/* Full-screen Menu Panel */}
-            <motion.div
-              initial={{ x: '100%', opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: '100%', opacity: 0 }}
-              transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-              className="fixed inset-0 z-[60] flex flex-col bg-gradient-to-b from-[#0A1428]/98 to-[#071021]/98 backdrop-blur-2xl md:hidden"
-              dir="rtl"
-            >
-              {/* Menu Header */}
-              <div className="flex items-center justify-between border-b border-white/10 bg-black/20 p-4 backdrop-blur-xl">
-                <div className="flex items-center gap-3 text-white">
-                  <div className="relative">
-                    <div className="absolute inset-0 rounded-2xl bg-cyber-blue/30 blur-xl" aria-hidden />
-                    <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-cyber-blue/20">
-                      <Sparkles className="h-5 w-5 text-white" />
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.35em] text-white/60">نئون دیجیتال</p>
-                    <p className="text-lg font-semibold">استودیو خلاقیت</p>
-                  </div>
-                </div>
-                
-                <button
-                  onClick={closeMobileMenu}
-                  className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-all duration-300 hover:bg-white/10"
-                  aria-label="Close mobile menu"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              {/* Navigation Items - Vertically Centered */}
-              <div className="flex-1 flex items-center justify-center px-6 py-8">
-                <nav className="w-full max-w-md">
-                  <div className="space-y-3">
-                    {navItems.map(({ label, href }, index) => (
-                      <motion.div
-                        key={label}
-                        initial={{ x: 50, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: index * 0.1, duration: 0.4, ease: 'easeOut' }}
-                      >
-                        <Link
-                          to={href}
-                          onClick={closeMobileMenu}
-                          className="flex items-center justify-between rounded-2xl border border-transparent px-6 py-5 text-right text-white transition-all duration-300 hover:border-cyber-blue/30 hover:bg-cyber-blue/10"
-                        >
-                          <span className="text-lg font-medium">{label}</span>
-                          <ArrowUpRight className="h-5 w-5 text-cyber-blue opacity-60" />
-                        </Link>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* Mobile CTA Button */}
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.5, duration: 0.4, ease: 'easeOut' }}
-                    className="mt-12"
-                  >
-                    <Link to="/contact" onClick={closeMobileMenu}>
-                      <Button className="w-full gap-3 text-lg py-5">
-                        درخواست تماس
-                        <ArrowUpRight className="h-5 w-5" />
-                      </Button>
-                    </Link>
-                  </motion.div>
-                </nav>
-              </div>
-
-              {/* Neon Glow Effects */}
-              <div className="pointer-events-none absolute inset-0">
-                <div className="absolute left-0 top-1/4 h-40 w-40 rounded-full bg-cyber-blue/20 blur-3xl" />
-                <div className="absolute right-0 bottom-1/4 h-48 w-48 rounded-full bg-neon-pink/15 blur-3xl" />
-                <div className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-laser-green/10 blur-3xl" />
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-    </>
   )
 }
 
@@ -690,37 +608,6 @@ function StacksSection() {
   )
 }
 
-function ProcessSection() {
-  const sectionRef = useSectionBackground('#071021')
-
-  return (
-    <motion.section
-      ref={sectionRef}
-      id="process"
-      className="space-y-10"
-      initial="hidden"
-      whileInView="show"
-      viewport={viewportConfig}
-      variants={sectionFade}
-    >
-      <div className="text-center space-y-3">
-        <p className="text-xs uppercase tracking-[0.4em] text-cyber-blue">فرآیند</p>
-        <h2 className="text-4xl font-semibold text-white">فرآیند همکاری</h2>
-      </div>
-      <motion.div className="grid gap-6 md:grid-cols-2" variants={staggerContainer}>
-        {processSteps.map((step, index) => (
-          <motion.div key={step.title} variants={staggerItem} className="glass-card rounded-[28px] border border-white/10 p-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-semibold text-white">{step.title}</h3>
-              <span className="text-sm text-white/60">۰{index + 1}</span>
-            </div>
-            <p className="mt-3 text-white/75">{step.description}</p>
-          </motion.div>
-        ))}
-      </motion.div>
-    </motion.section>
-  )
-}
 
 function FAQSection() {
   const [openIndex, setOpenIndex] = useState(0)

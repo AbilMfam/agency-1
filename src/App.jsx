@@ -5,6 +5,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Portfolio from './pages/Portfolio'
 import Services from './pages/Services'
+import PortfolioCaseStudy from './pages/portfolio/PortfolioCaseStudy'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/portfolio/case-study" element={<PortfolioCaseStudy />} />
         </Routes>
       </NeonLayout>
     </Router>

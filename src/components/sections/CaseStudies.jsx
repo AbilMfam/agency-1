@@ -29,17 +29,26 @@ const studies = [
 
 export default function CaseStudies() {
   return (
-    <section id="cases" className="relative py-24 px-6 md:px-12 lg:px-20">
+    <section
+      id="cases"
+      className="relative py-24 w-[100vw] max-w-none px-0"
+    >
       <div className="absolute inset-0 opacity-70 bg-[radial-gradient(circle_at_center,_rgba(71,163,255,0.2),_transparent_65%)]" aria-hidden />
-      <div className="relative z-10 space-y-10">
-        <div className="text-center space-y-4">
-          <p className="text-sm uppercase tracking-[0.45em] text-aqua-glow">Case Studies</p>
+      
+      <div className="relative z-10 mx-auto max-w-[1280px] px-6 md:px-12 lg:px-20 text-center">
+        <div className="space-y-4">
+          <p className="text-sm uppercase tracking-[0.45em] text-aqua-glow">پرونده‌های برجسته</p>
           <h2 className="text-4xl font-semibold text-white">Cyber-native launch stories</h2>
-          <p className="mx-auto max-w-2xl text-white/70">
+          <p className="mx-auto text-white/70">
             Built for teams who need radical polish and realtime iteration. Each launch mixes parallax mesh work with strategic CRO.
           </p>
         </div>
+      </div>
 
+      <div
+        className="relative z-10 left-1/2 w-screen max-w-none -translate-x-1/2 px-0 outline outline-1 outline-red-500"
+        dir="ltr"
+      >
         <Swiper
           modules={[Pagination, Autoplay]}
           slidesPerView={1}
@@ -47,7 +56,7 @@ export default function CaseStudies() {
           pagination={{ clickable: true }}
           autoplay={{ delay: 5500, disableOnInteraction: false }}
           breakpoints={{ 1024: { slidesPerView: 2 } }}
-          className="pb-16"
+          className="w-full pb-16"
         >
           {studies.map((study, index) => (
             <SwiperSlide key={study.title}>

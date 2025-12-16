@@ -11,22 +11,12 @@ export function VisualHero({
   children,
 }) {
   return (
-    <section className={cn('relative isolate overflow-hidden rounded-[48px] border border-white/10 bg-black/40 p-6 sm:p-10', className)}>
-      <motion.div
-        className="absolute inset-0"
-        animate={{ opacity: [0.45, 0.7, 0.45] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-        style={{
-          backgroundImage: `${overlay}, url(${src})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-        aria-hidden
-      />
-      <div
-        dir="ltr"
-        className="relative z-10 flex w-full flex-col items-end justify-end gap-10 text-right text-white lg:min-h-[420px] lg:flex-row lg:items-center lg:justify-between lg:gap-16"
-      >
+    <section className={cn('relative isolate overflow-visible p-6 sm:p-10 w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]', className)}>
+      <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div
+          dir="ltr"
+          className="relative z-10 flex w-full flex-col items-end justify-end gap-10 text-right text-white lg:flex-row lg:items-center lg:justify-between lg:gap-8"
+        >
         <div className="flex w-full items-center justify-center lg:w-1/2 lg:flex lg:justify-center lg:items-center">
           <NeonVisual />
         </div>
@@ -55,6 +45,7 @@ export function VisualHero({
           </motion.p>
         )}
           {children}
+        </div>
         </div>
       </div>
       <motion.div

@@ -32,6 +32,8 @@ import { Button } from '../components/ui/button'
 import { VisualHero } from '../components/Neon/VisualHero'
 import { NeonImage } from '../components/Neon/NeonImage'
 import { NeonAboutVisual } from '../components/Neon/NeonAboutVisual'
+import { NeonNavbar } from '../components/Neon/NeonNavbar'
+import Footer from '../components/sections/Footer'
 import { useBackground } from '../layout/NeonLayout'
 
 const services = [
@@ -181,59 +183,15 @@ function useSectionBackground(color) {
 
 export default function Services() {
   return (
-    <main className="space-y-24 pb-24">
+    <main className="space-y-24">
       <NeonNavbar />
       <HeroSection />
       <ServicesGridSection />
       <HighlightSection />
       <ProcessSection />
       <CTASection />
+      <Footer />
     </main>
-  )
-}
-
-function NeonNavbar() {
-  const navItems = [
-    { label: 'صفحه اصلی', href: '/' },
-    { label: 'خدمات', href: '/services' },
-    { label: 'نمونه‌کارها', href: '/portfolio' },
-    { label: 'درباره‌ما', href: '/about' },
-    { label: 'تماس', href: '/contact' },
-  ]
-
-  return (
-    <motion.nav
-      initial={{ opacity: 0, y: -20, filter: 'blur(12px)' }}
-      animate={{ opacity: 1, y: 0, filter: 'blur(0)' }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-      className="sticky top-6 z-30 flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-6 py-3 shadow-neon backdrop-blur-2xl"
-    >
-      <div className="flex items-center gap-3 text-white">
-        <div className="relative">
-          <div className="absolute inset-0 rounded-2xl bg-cyber-blue/30 blur-xl" aria-hidden />
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-cyber-blue/20">
-            <Sparkles className="h-5 w-5 text-white" />
-          </div>
-        </div>
-        <div>
-          <p className="text-xs uppercase tracking-[0.35em] text-white/60">نئون دیجیتال</p>
-          <p className="text-lg font-semibold">استودیو خلاقیت</p>
-        </div>
-      </div>
-      <div className="hidden items-center gap-6 text-sm text-white/70 md:flex">
-        {navItems.map(({ label, href }) => (
-          <Link key={label} to={href} className="transition-colors hover:text-white">
-            {label}
-          </Link>
-        ))}
-      </div>
-      <Link to="/contact">
-        <Button size="sm" className="gap-2">
-          درخواست تماس
-          <ArrowUpRight className="h-4 w-4" />
-        </Button>
-      </Link>
-    </motion.nav>
   )
 }
 
