@@ -463,15 +463,17 @@ function ServicesGridSection() {
       >
         {services.map((service, index) => {
           const Icon = service.icon
-          return (
+          const isEditingService = service.title === 'تدوین ویدئو و موشن‌گرافیک'
+          const isWebDesignService = service.title === 'طراحی سایت'
+          const Card = (
             <motion.div
               key={service.title}
               variants={staggerItem}
               className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-black/40 backdrop-blur-xl"
-              whileHover={{ 
+              whileHover={{
                 scale: 1.02,
                 y: -8,
-                transition: { duration: 0.3, ease: 'easeOut' }
+                transition: { duration: 0.3, ease: 'easeOut' },
               }}
             >
               {/* Background image with overlay */}
@@ -565,6 +567,18 @@ function ServicesGridSection() {
                 aria-hidden
               />
             </motion.div>
+          )
+
+          return isEditingService ? (
+            <Link key={service.title} to="/editing-services" className="block cursor-pointer">
+              {Card}
+            </Link>
+          ) : isWebDesignService ? (
+            <Link key={service.title} to="/web-design-services" className="block cursor-pointer">
+              {Card}
+            </Link>
+          ) : (
+            Card
           )
         })}
       </motion.div>

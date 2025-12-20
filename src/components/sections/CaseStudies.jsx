@@ -46,7 +46,7 @@ export default function CaseStudies() {
       </div>
 
       <div
-        className="relative z-10 left-1/2 w-screen max-w-none -translate-x-1/2 px-0 outline outline-1 outline-red-500"
+        className="relative z-10 w-full max-w-full px-0"
         dir="ltr"
       >
         <Swiper

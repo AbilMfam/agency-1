@@ -42,7 +42,7 @@ export function NeonLayout({ children }) {
 
   return (
     <BackgroundContext.Provider value={{ updateBackground }}>
-      <div className="relative min-h-screen bg-night text-white overflow-x-visible">
+      <div className="relative min-h-screen bg-night text-white overflow-x-hidden max-w-full">
         <motion.div
           className="pointer-events-none fixed inset-0 -z-10"
           aria-hidden
@@ -72,25 +72,25 @@ export function NeonLayout({ children }) {
           style={{ background: 'radial-gradient(circle at 20% 80%, rgba(7,16,33,0.55), transparent 55%)' }}
         />
         <motion.div
-          className="blur-blob top-0 -left-10"
+          className="blur-blob top-0 left-0"
           style={{ background: 'rgba(0, 120, 255, 0.12)' }}
           animate={{ x: [0, 120, -40], y: [0, -80, 20], scale: [0.9, 1.2, 1] }}
           transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="blur-blob bottom-10 -right-6"
+          className="blur-blob bottom-10 right-0"
           style={{ background: 'rgba(242, 60, 255, 0.1)' }}
           animate={{ x: [0, -90, 30], y: [0, 50, -20], scale: [1, 1.05, 0.95] }}
           transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute left-1/4 top-1/3 h-64 w-64 rounded-full blur-[160px]"
+          className="absolute left-1/4 top-1/3 h-64 w-64 rounded-full blur-[160px] max-w-full"
           style={{ background: 'rgba(24, 240, 200, 0.065)' }}
           animate={{ opacity: [0.2, 0.6, 0.3], scale: [0.8, 1.1, 0.9] }}
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute right-1/5 top-20 h-[420px] w-[420px] rounded-full blur-[180px]"
+          className="absolute right-1/5 top-20 h-[420px] w-[420px] rounded-full blur-[180px] max-w-full max-h-full"
           style={{ background: 'rgba(155, 92, 255, 0.065)' }}
           animate={{ opacity: [0.15, 0.55, 0.25], scale: [0.7, 1.15, 0.85] }}
           transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}

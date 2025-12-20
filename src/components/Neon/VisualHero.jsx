@@ -22,7 +22,7 @@ export function VisualHero({
         </div>
         <div
           dir="rtl"
-          className="flex w-full max-w-2xl flex-col items-center justify-center gap-6 text-center mx-auto text-right [&_*]:text-right [&_*]:text-center lg:w-1/2"
+          className="flex w-full max-w-2xl flex-col items-center justify-center gap-6 text-center mx-auto lg:w-1/2 lg:text-right lg:items-start"
           style={{ direction: 'rtl' }}
         >
           <div className="neon-chip text-white/70">Neon Studio</div>

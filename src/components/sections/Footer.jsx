@@ -12,7 +12,7 @@ const Footer = () => {
   }
 
   return (
-    <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+    <div className="w-full max-w-full relative">
       <footer className="relative bg-black/30 backdrop-blur-2xl border-t border-white/10 overflow-hidden">
       {/* Large Neon Orb Background */}
       <motion.div
