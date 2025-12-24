@@ -12,18 +12,16 @@ import PortfolioCaseStudy from './pages/portfolio/PortfolioCaseStudy'
 function App() {
   return (
     <Router>
-      <NeonLayout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/editing-services" element={<EditingServices />} />
-          <Route path="/web-design-services" element={<WebDesignServices />} />
-          <Route path="/portfolio/case-study" element={<PortfolioCaseStudy />} />
-        </Routes>
-      </NeonLayout>
+      <Routes>
+        <Route path="/" element={<NeonLayout fullWidth={true}><Home /></NeonLayout>} />
+        <Route path="/about" element={<NeonLayout><About /></NeonLayout>} />
+        <Route path="/contact" element={<NeonLayout><Contact /></NeonLayout>} />
+        <Route path="/portfolio" element={<NeonLayout fullWidth={true} fullWidthHeader={true}><Portfolio /></NeonLayout>} />
+        <Route path="/services" element={<NeonLayout><Services /></NeonLayout>} />
+        <Route path="/editing-services" element={<NeonLayout><EditingServices /></NeonLayout>} />
+        <Route path="/web-design-services" element={<NeonLayout><WebDesignServices /></NeonLayout>} />
+        <Route path="/portfolio/case-study" element={<NeonLayout><PortfolioCaseStudy /></NeonLayout>} />
+      </Routes>
     </Router>
   )
 }

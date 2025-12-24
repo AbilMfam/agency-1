@@ -1,9 +1,15 @@
 import { motion } from 'framer-motion'
 import { Instagram, MessageCircle, Linkedin, Mail, Send, MapPin } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 
 const Footer = () => {
   const [email, setEmail] = useState('')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleSubscribe = (e) => {
     e.preventDefault()
@@ -11,9 +17,9 @@ const Footer = () => {
     setEmail('')
   }
 
-  return (
-    <div className="w-full max-w-full relative">
-      <footer className="relative bg-black/30 backdrop-blur-2xl border-t border-white/10 overflow-hidden">
+  const footerContent = (
+    <div className="w-full">
+      <footer className="relative w-full bg-black/30 backdrop-blur-2xl border-t border-white/10 overflow-hidden">
       {/* Large Neon Orb Background */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center -z-10"
@@ -54,7 +60,7 @@ const Footer = () => {
       {/* Main Footer Content */}
       <div className="relative z-10 w-full">
         <div className="w-full py-20">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Top Section - Brand Introduction */}
           <motion.div
@@ -252,6 +258,10 @@ const Footer = () => {
     </footer>
     </div>
   )
+
+  // Render footer outside any layout constraints using portal
+  if (!mounted) return null
+  return createPortal(footerContent, document.body)
 }
 
 export default Footer

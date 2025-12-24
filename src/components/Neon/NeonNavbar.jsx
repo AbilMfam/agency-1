@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Sparkles, ArrowUpRight, Menu, X } from 'lucide-react'
 import { Button } from '../ui/button'
 
-export function NeonNavbar() {
+export function NeonNavbar({ fullWidth = false }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
   const navItems = [
@@ -43,7 +43,7 @@ export function NeonNavbar() {
         initial={{ opacity: 0, y: -20, filter: 'blur(12px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0)' }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="sticky top-6 z-40 flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 shadow-neon backdrop-blur-2xl md:px-6"
+        className={`sticky top-6 z-40 flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 shadow-neon backdrop-blur-2xl md:px-6 ${fullWidth ? 'w-full' : 'max-w-7xl mx-auto'}`}
       >
         {/* Logo - Left on desktop, centered on mobile */}
         <div className="flex items-center gap-3 text-white md:gap-3">

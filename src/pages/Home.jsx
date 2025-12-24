@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { motion, useAnimation } from 'framer-motion'
+import { useEffect, useState, useRef } from 'react'
+import { motion, useAnimation, useScroll, useTransform, useSpring } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
   Sparkles,
@@ -456,11 +456,194 @@ const whyChooseUsFeatures = [
   },
 ]
 
+const recentWorksData = [
+  {
+    id: 1,
+    title: 'نوآر ویب',
+    year: '۲۰۲۴',
+    role: 'Lead Designer',
+    services: ['UI/UX Design', 'Web Development', 'Brand Identity'],
+    image: '/samples/1.jpg',
+    description: 'طراحی رابط کاربری مدرن با تم نئونی و تجربه کاربری پیشرفته'
+  },
+  {
+    id: 2,
+    title: 'اسپکترام پلاس',
+    year: '۲۰۲۴',
+    role: 'Creative Director',
+    services: ['Web Design', 'Motion Graphics', 'Development'],
+    image: '/samples/2.jpg',
+    description: 'بازطراحی کامل وب‌سایت با انیمیشن‌های پیشرفته و تعاملات نئونی'
+  },
+  {
+    id: 3,
+    title: 'اوربیت شاپ',
+    year: '۲۰۲۳',
+    role: 'UI Designer',
+    services: ['E-Commerce', 'Mobile App', 'Brand Strategy'],
+    image: '/samples/3.jpg',
+    description: 'پلتفرم تجارت الکترونیک با طراحی ریسپانسیو و تجربه خرید هوشمند'
+  }
+]
+
+const RecentWorks = () => {
+  const containerRef = useRef(null);
+  const projects = [
+    { id: "01", title: "تدوین تبلیغاتی نایکی", year: "2024", role: "Lead Editor", services: ["Color Grading", "VFX"], image: "/samples/1.jpg" },
+    { id: "02", title: "موشن گرافیک اپلیکیشن", year: "2023", role: "UI Designer", services: ["Animation", "Lottie"], image: "/samples/2.jpg" },
+    { id: "03", title: "مستند 'مسیر نو'", year: "2024", role: "Cinematographer", services: ["Post-Production"], image: "/samples/3.jpg" }
+  ];
+
+  // Single useScroll for global progress
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  return (
+    <section className="relative" dir="rtl" style={{ position: 'relative' }}>
+      {/* بافت نویز سراسری */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-[100] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      
+      {/* Centered Title */}
+      <div className="container mx-auto px-6 py-8 pb-4 relative z-10 text-center">
+        <p className="text-cyber-blue font-mono text-sm tracking-[0.3em] mb-4 uppercase">Selected Works</p>
+        <h2 className="text-6xl font-bold text-white tracking-tighter">پروژه‌های اخیر</h2>
+      </div>
+
+      {/* Main Container with calculated height */}
+      <div 
+        ref={containerRef}
+        style={{ height: `${(projects.length - 0.7) * 150}vh` }}
+        className="relative"
+      >
+        {projects.map((project, index) => (
+          <ProjectCard 
+            key={project.id} 
+            {...project} 
+            index={index} 
+            total={projects.length}
+            scrollProgress={scrollYProgress}
+          />
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const ProjectCard = ({ id, title, year, role, services, image, index, total, scrollProgress }) => {
+  // Smooth progress with inertia for cinematic feel
+  const smoothProgress = useSpring(scrollProgress, { 
+    stiffness: 50, 
+    damping: 20, 
+    restDelta: 0.001 
+  });
+
+  // Sequential timing: Each card starts much earlier
+  const start = (index + 0.3) / total;
+  const end = index === total - 1 ? (index + 0.5) / total : (index + 0.7) / total;
+
+  // Last card should never rotate or shrink
+  const isLastCard = index === total - 1;
+  
+  // Complete disappearance: cards become smaller but fully invisible
+  const scale = useTransform(
+    smoothProgress, 
+    [0, start, end], 
+    isLastCard ? [1, 1, 1] : [1, 1, 0.5]
+  );
+  const rotate = useTransform(
+    smoothProgress, 
+    [0, start, end], 
+    isLastCard ? [0, 0, 0] : [0, 0, -20]
+  );
+  const opacity = useTransform(
+    smoothProgress, 
+    [0, start, end], 
+    isLastCard ? [1, 1, 1] : [1, 1, 0]
+  );
+
+  return (
+    <div 
+      className="h-screen sticky top-0 flex items-center justify-center w-full"
+      style={{ 
+        zIndex: index + 1,
+        position: 'sticky'
+      }}
+    >
+      <motion.div
+        style={{ 
+          scale, 
+          rotate,
+          opacity,
+          transformOrigin: 'bottom center',
+          top: '10%',
+          boxShadow: isLastCard ? '0 0 40px rgba(79, 139, 253, 0.4), 0_-20px_60px_rgba(0,0,0,0.8)' : '0_-20px_60px_rgba(0,0,0,0.8)'
+        }}
+        className="relative w-full max-w-6xl h-[75vh] md:h-[80vh] rounded-[40px] border border-blue-500/30 overflow-hidden flex flex-col md:flex-row items-center p-8 md:p-12 gap-10 backdrop-blur-[20px] bg-blue-950/20"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, delay: index * 0.1 }}
+      >
+        {/* بخش محتوا (راست) */}
+        <div className="w-full md:w-1/3 text-right order-2 md:order-1 space-y-8 h-full flex flex-col justify-center">
+          <div className="flex items-center gap-4 text-white/30 font-mono text-xl">
+            <span>{id}</span>
+            <div className="h-[1px] w-12 bg-white/10"></div>
+            <span>0{total}</span>
+          </div>
+          
+          <h3 className="text-4xl md:text-5xl font-bold text-white leading-tight tracking-tighter">
+            {title}
+          </h3>
+          
+          <div className="grid grid-cols-2 gap-y-10 pt-10 border-t border-white/10">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-2">Year</p>
+              <p className="font-medium text-white">{year}</p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-2">Role</p>
+              <p className="font-medium text-white">{role}</p>
+            </div>
+            <div className="col-span-2">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-2">Services</p>
+              <div className="flex flex-wrap gap-2">
+                {services.map(s => (
+                  <span key={s} className="px-3 py-1 text-[11px] border border-white/20 rounded-full text-white/70 tracking-wide uppercase">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* بخش تصویر (چپ) */}
+        <div className="w-full md:w-2/3 h-full rounded-[30px] overflow-hidden order-1 md:order-2 group relative">
+          <img 
+            src={image} 
+            className="w-full h-full object-cover transition-all duration-700 grayscale-[40%] group-hover:grayscale-0 scale-105 group-hover:scale-100" 
+            alt={title}
+          />
+          {/* دکمه گوشه تصویر */}
+          <div className="absolute top-6 left-6 opacity-0 group-hover:opacity-100 transition-all duration-500 transform -translate-y-4 group-hover:translate-y-0">
+             <div className="w-14 h-14 rounded-full bg-white text-black flex items-center justify-center shadow-2xl">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+             </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 export default function Home() {
   return (
     <main className="space-y-24">
       <NeonNavbar />
       <HeroSection />
+      <RecentWorks />
       <ServicesSection />
       <WhyChooseUsSection />
       <WorkflowSection />
@@ -470,8 +653,7 @@ export default function Home() {
       <FAQSection />
       <AboutSection />
       <CTASection />
-      <FooterSection />
-      <Footer />
+      <Footer className="relative z-[100]" />
     </main>
   )
 }
